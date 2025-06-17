@@ -1,0 +1,87 @@
+/* responsive.css - Responsive Design and Media Queries */
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .game-grid {
+    grid-template-columns: minmax(300px, 1fr) 350px minmax(300px, 1fr);
+    gap: 16px;
+  }
+  .game-container {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .game-grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "duck duck"
+      "stats shop"
+      "achievements achievements";
+    gap: 16px;
+  }
+  .duck-container {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 768px) {
+  .game-grid {
+    grid-template-columns: 1fr;
+    grid-template-areas: "duck" "stats" "shop" "achievements";
+    gap: 16px;
+  }
+
+  .notification-container {
+    top: 10px;
+    max-width: 350px;
+  }
+
+  .notification {
+    padding: 12px 20px;
+    font-size: 0.9rem;
+  }
+
+  .glass-card {
+    padding: 18px;
+  }
+
+  .duck {
+    font-size: 6rem;
+  }
+
+  .duck-area {
+    height: 250px;
+  }
+
+  .level-complete {
+    padding: 30px 40px;
+    font-size: 1.4rem;
+    margin: 0 20px;
+    max-width: calc(100vw - 40px);
+  }
+}
+
+/* Touch-friendly improvements */
+@media (hover: none) and (pointer: coarse) {
+  .shop-button {
+    min-height: 48px;
+  }
+
+  .duck {
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .glass-card:hover {
+    transform: none;
+  }
+
+  .shop-button:hover:not(:disabled) {
+    transform: none;
+  }
+
+  .stat-item:hover {
+    transform: none;
+  }
+}

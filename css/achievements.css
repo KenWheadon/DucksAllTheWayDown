@@ -1,0 +1,44 @@
+/* achievements.css - Achievement System Styles */
+
+/* Achievements */
+.achievements-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.achievement {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+}
+
+.achievement.unlocked {
+  border-color: #ffd700;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+}
+
+.achievement-icon {
+  font-size: 2rem;
+  margin-bottom: 8px;
+  filter: grayscale(100%);
+  transition: filter 0.3s ease;
+}
+
+.achievement.unlocked .achievement-icon {
+  filter: grayscale(0%);
+}
+
+.achievement-title {
+  color: white;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.achievement-description {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.85rem;
+}

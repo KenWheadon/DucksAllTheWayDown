@@ -1,0 +1,122 @@
+/* shop.css - Shop System Styles */
+
+/* Shop Styles */
+.shop-header {
+  color: white;
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.shop-category {
+  margin-bottom: 24px;
+}
+
+.category-title {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+  padding-left: 4px;
+}
+
+.shop-item {
+  margin-bottom: 12px;
+  position: relative;
+}
+
+.shop-button {
+  width: 100%;
+  padding: 16px 20px;
+  border: none;
+  border-radius: 16px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 60px;
+}
+
+.shop-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s;
+}
+
+.shop-button:hover::before {
+  left: 100%;
+}
+
+.weapon-button {
+  background: linear-gradient(135deg, #ff6b6b, #ff8a65);
+  color: white;
+  box-shadow: 0 4px 20px rgba(255, 107, 107, 0.3);
+}
+
+.weapon-button:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(255, 107, 107, 0.4);
+}
+
+.upgrade-button {
+  background: linear-gradient(135deg, #7c4dff, #9c27b0);
+  color: white;
+  box-shadow: 0 4px 20px rgba(124, 77, 255, 0.3);
+}
+
+.upgrade-button:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(124, 77, 255, 0.4);
+}
+
+.shop-button:disabled {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.4);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.button-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.button-title {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.button-description {
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+.button-price {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #ffee58;
+  text-shadow: 0 0 10px rgba(255, 238, 88, 0.3);
+}

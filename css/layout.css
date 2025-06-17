@@ -1,0 +1,81 @@
+/* layout.css - Layout and Grid System */
+
+/* Layout Classes */
+.game-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  position: relative;
+  z-index: 1;
+  animation: fadeIn 1s ease-out;
+}
+
+.game-grid {
+  display: grid;
+  grid-template-columns: 1fr 400px 1fr;
+  grid-template-rows: auto auto auto;
+  grid-template-areas:
+    "stats duck shop"
+    "progress progress progress"
+    "achievements achievements achievements";
+  gap: 20px;
+}
+
+.stats-panel {
+  grid-area: stats;
+}
+
+.duck-container {
+  grid-area: duck;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.shop-panel {
+  grid-area: shop;
+}
+
+.progress-section {
+  grid-area: progress;
+}
+
+.achievements-section {
+  grid-area: achievements;
+}
+
+/* Header Styles */
+.game-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.game-title {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 800;
+  background: linear-gradient(135deg, #ff6b6b, #ffa726, #ffee58);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0;
+  text-shadow: 0 0 30px rgba(255, 107, 107, 0.5);
+  animation: titlePulse 3s ease-in-out infinite;
+}
+
+.game-subtitle {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 10px 0 0 0;
+  font-weight: 300;
+}
+
+/* Layout Animations */
+@keyframes titlePulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+}
