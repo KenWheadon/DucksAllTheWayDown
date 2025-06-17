@@ -26,7 +26,7 @@ class DuckDestroyerGame {
       this.visualEffects
     );
 
-    // FIX: Set up shop system callback for duck defeats
+    // Set up shop system callback for duck defeats
     this.shopSystem.setDuckDefeatedCallback(() => this.nextDuck());
   }
 
@@ -187,7 +187,6 @@ class DuckDestroyerGame {
   nextDuck() {
     this.handleDuckDeath();
     this.awardLevelCompletionBonus();
-    this.updateStats();
     this.createDeathEffects();
     this.respawnDuck();
   }
@@ -211,17 +210,11 @@ class DuckDestroyerGame {
   }
 
   /**
-   * Update game statistics
-   */
-  updateStats() {
-    // Could add more complex stat tracking here
-  }
-
-  /**
    * Create visual effects for duck death
    */
   createDeathEffects() {
-    this.visualEffects.createExplosion();
+    const bonusCoins = this.gameState.getLevelCompletionReward();
+    this.visualEffects.createExplosion(bonusCoins);
     this.notificationSystem.showLevelComplete(this.gameState);
     this.uiManager.fadeOutDuck();
   }
@@ -263,18 +256,9 @@ class DuckDestroyerGame {
   }
 
   /**
-   * Auto clicker attack logic
-   */
-  autoClickerAttack() {
-    // FIX: Delegate to shop system to avoid duplication
-    this.shopSystem.autoClickerAttack();
-  }
-
-  /**
    * Start auto clicker if available
    */
   startAutoClicker() {
-    // FIX: Delegate to shop system
     if (this.gameState.hasAutoClicker) {
       this.shopSystem.startAutoClickerInterval();
     }
@@ -284,10 +268,7 @@ class DuckDestroyerGame {
    * Stop auto clicker
    */
   stopAutoClicker() {
-    if (this.gameState.autoClickerInterval) {
-      clearInterval(this.gameState.autoClickerInterval);
-      this.gameState.autoClickerInterval = null;
-    }
+    this.shopSystem.stopAutoClicker();
   }
 
   /**
@@ -309,7 +290,6 @@ class DuckDestroyerGame {
       gameState: this.gameState,
       timestamp: Date.now(),
     };
-    // Could implement localStorage saving here
     return saveData;
   }
 

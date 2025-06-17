@@ -64,6 +64,7 @@ class UIManager {
     this.updateShopButtons(gameState);
     this.updateWeaponButtonDisplay(gameState);
     this.updateAutoClickerButtonDisplay(gameState);
+    this.updateDuckDisplay(gameState);
   }
 
   /**
@@ -83,6 +84,13 @@ class UIManager {
     this.elements.maxHP.textContent = gameState.maxHP;
     this.elements.upgradePrice.textContent = gameState.upgradePrice;
     this.elements.duckUpgradePrice.textContent = gameState.duckUpgradePrice;
+  }
+
+  /**
+   * Update duck display (emoji and classes)
+   */
+  updateDuckDisplay(gameState) {
+    this.elements.duck.textContent = gameState.getDuckEmoji();
   }
 
   /**

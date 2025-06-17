@@ -47,34 +47,32 @@ class NotificationSystem {
    * Show achievement unlocked notification
    */
   showAchievementUnlocked(achievement) {
-    const achievementEl = document.createElement("div");
-    achievementEl.className = "level-complete";
-    achievementEl.innerHTML = `🏆 Achievement Unlocked!<br>${achievement.icon} ${achievement.title}`;
-    document.body.appendChild(achievementEl);
-
-    setTimeout(() => achievementEl.remove(), 2500);
+    // Use the standard notification system to show at top of screen
+    this.showNotification(
+      `🏆 Achievement Unlocked! ${achievement.icon} ${achievement.title}`,
+      "achievement",
+      4000
+    );
   }
 
   /**
-   * Show level completion notification
+   * Show level completion notification (removed popup, just for boss defeats now)
    */
   showLevelComplete(gameState) {
-    const baseReward = gameState.currentDuck;
-    const multipliedReward = Math.floor(
-      baseReward * gameState.duckCoinMultiplier
-    );
-
-    let message = `🦆💥 Duck #${gameState.currentDuck} Eliminated!`;
+    // Only show popup for boss defeats, regular ducks just get visual effects
     if (gameState.isBoss) {
-      message = `👹💥 BOSS DEFEATED!`;
+      const baseReward = gameState.currentDuck;
+      const multipliedReward = Math.floor(
+        baseReward * gameState.duckCoinMultiplier
+      );
+
+      const levelEl = document.createElement("div");
+      levelEl.className = "level-complete";
+      levelEl.innerHTML = `👹💥 BOSS DEFEATED!<br>+${multipliedReward.toLocaleString()} Bonus Coins!`;
+      document.body.appendChild(levelEl);
+
+      setTimeout(() => levelEl.remove(), 2000);
     }
-
-    const levelEl = document.createElement("div");
-    levelEl.className = "level-complete";
-    levelEl.innerHTML = `${message}<br>+${multipliedReward.toLocaleString()} Bonus Coins!`;
-    document.body.appendChild(levelEl);
-
-    setTimeout(() => levelEl.remove(), 2000);
   }
 
   /**

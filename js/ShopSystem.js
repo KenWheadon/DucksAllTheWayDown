@@ -10,6 +10,7 @@ class ShopSystem {
     this.uiManager = uiManager;
     this.notificationSystem = notificationSystem;
     this.visualEffects = visualEffects;
+    this.onDuckDefeated = null;
     this.setupEventListeners();
   }
 
@@ -43,9 +44,6 @@ class ShopSystem {
     this.visualEffects.createPurchaseEffect(
       this.uiManager.elements.upgradeClick
     );
-
-    // FIX: Update display after purchase
-    this.updateDisplay();
   }
 
   /**
@@ -62,7 +60,7 @@ class ShopSystem {
       this.gameState.knifeLevel = 1;
       this.gameState.weapon = {
         name: "Knife",
-        damage: 20 + this.gameState.clickDamage - 1,
+        damage: this.calculateKnifeDamage(),
         icon: "🔪",
       };
       this.notificationSystem.showWeaponPurchased("Combat Knife", "🔪");
@@ -78,9 +76,6 @@ class ShopSystem {
 
     this.gameState.knifePrice = Math.floor(this.gameState.knifePrice * 2);
     this.visualEffects.createPurchaseEffect(this.uiManager.elements.buyKnife);
-
-    // FIX: Update display after purchase
-    this.updateDisplay();
   }
 
   /**
@@ -113,9 +108,6 @@ class ShopSystem {
 
     this.gameState.gunPrice = Math.floor(this.gameState.gunPrice * 2);
     this.visualEffects.createPurchaseEffect(this.uiManager.elements.buyGun);
-
-    // FIX: Update display after purchase
-    this.updateDisplay();
   }
 
   /**
@@ -140,9 +132,6 @@ class ShopSystem {
     this.visualEffects.createPurchaseEffect(
       this.uiManager.elements.upgradeDuck
     );
-
-    // FIX: Update display after purchase
-    this.updateDisplay();
   }
 
   /**
@@ -159,8 +148,6 @@ class ShopSystem {
       this.gameState.autoClickerLevel = 1;
       this.gameState.autoClickerDamage = 1;
       this.notificationSystem.showAutoClickerActivated();
-
-      // FIX: Start the auto clicker interval
       this.startAutoClickerInterval();
     } else {
       // Upgrade existing auto clicker
@@ -181,24 +168,26 @@ class ShopSystem {
   }
 
   /**
-   * Start auto clicker interval (FIX: Added missing method)
+   * Start auto clicker interval
    */
   startAutoClickerInterval() {
-    if (!this.gameState.autoClickerInterval) {
-      this.gameState.autoClickerInterval = setInterval(() => {
-        this.autoClickerAttack();
-      }, 1000);
+    if (this.gameState.autoClickerInterval) {
+      clearInterval(this.gameState.autoClickerInterval);
     }
+
+    this.gameState.autoClickerInterval = setInterval(() => {
+      this.autoClickerAttack();
+    }, 1000);
   }
 
   /**
-   * Auto clicker attack method (FIX: Moved from main game class)
+   * Auto clicker attack method
    */
   autoClickerAttack() {
     if (this.gameState.currentHP <= 0 || !this.gameState.hasAutoClicker) return;
 
     const damage = this.gameState.autoClickerDamage;
-    const coinReward = 1;
+    const coinReward = this.gameState.calculateCoinReward(damage, false);
 
     this.gameState.currentHP = Math.max(0, this.gameState.currentHP - damage);
     this.gameState.coins += coinReward;
@@ -217,37 +206,16 @@ class ShopSystem {
       this.notificationSystem.showBossEnraged();
     }
 
-    // FIX: Update display after auto attack
-    this.updateDisplay();
-
-    if (this.gameState.currentHP <= 0) {
-      setTimeout(() => this.nextDuck(), 400);
+    if (this.gameState.currentHP <= 0 && this.onDuckDefeated) {
+      setTimeout(() => this.onDuckDefeated(), 400);
     }
   }
 
   /**
-   * Handle duck death and progression (FIX: Added missing method)
-   */
-  nextDuck() {
-    // This should be handled by the main game class
-    // Emit an event or call a callback instead
-    if (this.onDuckDefeated) {
-      this.onDuckDefeated();
-    }
-  }
-
-  /**
-   * Set callback for duck defeated (FIX: Added missing method)
+   * Set callback for duck defeated
    */
   setDuckDefeatedCallback(callback) {
     this.onDuckDefeated = callback;
-  }
-
-  /**
-   * Update display (FIX: Added missing method)
-   */
-  updateDisplay() {
-    this.uiManager.updateDisplay(this.gameState);
   }
 
   /**
@@ -312,70 +280,12 @@ class ShopSystem {
   }
 
   /**
-   * Get upgrade efficiency (damage per coin) for recommendations
+   * Stop auto clicker (for cleanup)
    */
-  getUpgradeEfficiency() {
-    const efficiencies = {};
-
-    // Damage upgrade efficiency
-    const damageIncrease = 1;
-    efficiencies.damage = damageIncrease / this.gameState.upgradePrice;
-
-    // Knife efficiency
-    if (this.gameState.knifeLevel === 0) {
-      efficiencies.knife = 20 / this.gameState.knifePrice;
-    } else {
-      const currentDamage = this.calculateKnifeDamage();
-      const newDamage =
-        20 + this.gameState.knifeLevel * 15 + this.gameState.clickDamage - 1;
-      efficiencies.knife =
-        (newDamage - currentDamage) / this.gameState.knifePrice;
+  stopAutoClicker() {
+    if (this.gameState.autoClickerInterval) {
+      clearInterval(this.gameState.autoClickerInterval);
+      this.gameState.autoClickerInterval = null;
     }
-
-    // Gun efficiency
-    if (this.gameState.gunLevel === 0) {
-      efficiencies.gun = 200 / this.gameState.gunPrice;
-    } else {
-      const currentDamage = this.calculateGunDamage();
-      const newDamage =
-        200 +
-        this.gameState.gunLevel * 150 +
-        (this.gameState.clickDamage - 1) * 10;
-      efficiencies.gun = (newDamage - currentDamage) / this.gameState.gunPrice;
-    }
-
-    return efficiencies;
-  }
-
-  /**
-   * Get recommended purchase based on efficiency
-   */
-  getRecommendedPurchase() {
-    const efficiencies = this.getUpgradeEfficiency();
-    const affordable = {};
-
-    // Filter to only affordable options
-    if (this.canAfford(this.gameState.upgradePrice)) {
-      affordable.damage = efficiencies.damage;
-    }
-    if (this.canAfford(this.gameState.knifePrice)) {
-      affordable.knife = efficiencies.knife;
-    }
-    if (this.canAfford(this.gameState.gunPrice)) {
-      affordable.gun = efficiencies.gun;
-    }
-
-    // Find the most efficient affordable upgrade
-    let bestOption = null;
-    let bestEfficiency = 0;
-
-    for (const [option, efficiency] of Object.entries(affordable)) {
-      if (efficiency > bestEfficiency) {
-        bestEfficiency = efficiency;
-        bestOption = option;
-      }
-    }
-
-    return bestOption;
   }
 }

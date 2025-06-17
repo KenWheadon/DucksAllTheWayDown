@@ -448,6 +448,31 @@ body::before {
   animation: explode 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
+.main-coin-reward {
+  position: absolute;
+  color: #ffd700;
+  font-size: 3.5rem;
+  font-weight: 900;
+  pointer-events: none;
+  z-index: 21;
+  animation: mainCoinFloat 2.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  text-shadow: 3px 3px 12px rgba(0, 0, 0, 0.8);
+  background: linear-gradient(135deg, #ffd700, #ffb700);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.small-coin-effect {
+  position: absolute;
+  color: #ffd700;
+  font-size: 2rem;
+  pointer-events: none;
+  z-index: 20;
+  animation: smallCoinFloat 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
+}
+
 /* Notifications */
 .notification-container {
   position: fixed;
@@ -482,6 +507,8 @@ body::before {
 .notification.achievement {
   border-left: 4px solid #ffd700;
   background: rgba(255, 215, 0, 0.15);
+  position: relative;
+  z-index: 1001;
 }
 
 .notification.boss-defeat {
@@ -712,6 +739,47 @@ body::before {
   100% {
     opacity: 0;
     transform: translate(var(--dx), var(--dy)) scale(0);
+  }
+}
+
+@keyframes mainCoinFloat {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) translateY(0) rotate(0deg);
+  }
+  20% {
+    opacity: 1;
+    transform: scale(1.3) translateY(-40px) rotate(180deg);
+  }
+  50% {
+    transform: scale(1.1) translateY(-60px) rotate(360deg);
+  }
+  80% {
+    opacity: 1;
+    transform: scale(1) translateY(-80px) rotate(540deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.8) translateY(-120px) rotate(720deg);
+  }
+}
+
+@keyframes smallCoinFloat {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) translateY(0) rotate(0deg);
+  }
+  30% {
+    opacity: 1;
+    transform: scale(1.2) translateY(-30px) rotate(180deg);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1) translateY(-50px) rotate(360deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.6) translateY(-80px) rotate(540deg);
   }
 }
 

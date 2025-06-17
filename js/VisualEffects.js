@@ -65,9 +65,9 @@ class VisualEffects {
   }
 
   /**
-   * Create explosion effect for duck death
+   * Create explosion effect for duck death with coin shower
    */
-  createExplosion() {
+  createExplosion(coinReward = 0) {
     const explosion = document.createElement("div");
     explosion.className = "explosion";
 
@@ -79,6 +79,46 @@ class VisualEffects {
 
     this.duckArea.appendChild(explosion);
     setTimeout(() => explosion.remove(), 1200);
+
+    // Create coin shower effect if coins were earned
+    if (coinReward > 0) {
+      this.createCoinShower(coinReward);
+    }
+  }
+
+  /**
+   * Create a shower of coins for duck death
+   */
+  createCoinShower(coinAmount) {
+    const centerX = this.duckArea.offsetWidth / 2;
+    const centerY = this.duckArea.offsetHeight / 2;
+
+    // Create main coin reward display
+    const mainCoin = document.createElement("div");
+    mainCoin.className = "main-coin-reward";
+    mainCoin.textContent = `+${coinAmount.toLocaleString()}💰`;
+    mainCoin.style.left = centerX - 60 + "px";
+    mainCoin.style.top = centerY - 80 + "px";
+    this.duckArea.appendChild(mainCoin);
+
+    setTimeout(() => mainCoin.remove(), 2500);
+
+    // Create multiple smaller coin effects around the main one
+    for (let i = 0; i < 8; i++) {
+      const angle = (Math.PI * 2 * i) / 8;
+      const distance = 80 + Math.random() * 40;
+      const x = centerX + Math.cos(angle) * distance;
+      const y = centerY + Math.sin(angle) * distance;
+
+      const smallCoin = document.createElement("div");
+      smallCoin.className = "small-coin-effect";
+      smallCoin.textContent = "💰";
+      smallCoin.style.left = x + "px";
+      smallCoin.style.top = y + "px";
+      this.duckArea.appendChild(smallCoin);
+
+      setTimeout(() => smallCoin.remove(), 2000 + Math.random() * 500);
+    }
   }
 
   /**

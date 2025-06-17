@@ -109,7 +109,7 @@ class GameState {
       coinReward *= 2;
     }
 
-    return coinReward;
+    return Math.max(1, coinReward);
   }
 
   /**
@@ -131,6 +131,20 @@ class GameState {
    */
   getLevelCompletionReward() {
     const baseReward = this.currentDuck;
-    return Math.floor(baseReward * this.duckCoinMultiplier);
+    let reward = Math.floor(baseReward * this.duckCoinMultiplier);
+
+    // Boss bonus (3x normal reward)
+    if (this.isBoss) {
+      reward *= 3;
+    }
+
+    return reward;
+  }
+
+  /**
+   * Update duck emoji based on boss status
+   */
+  getDuckEmoji() {
+    return this.isBoss ? "👹" : "🦆";
   }
 }
